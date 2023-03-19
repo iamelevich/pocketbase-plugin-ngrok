@@ -3,10 +3,10 @@ package pocketbase_plugin_ngrok
 import (
 	"context"
 	"fmt"
-	"github.com/fatih/color"
 	"log"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/pocketbase/pocketbase/core"
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"
