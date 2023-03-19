@@ -1,6 +1,7 @@
 package pocketbase_plugin_ngrok
 
 import (
+	"context"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"testing"
@@ -21,6 +22,19 @@ func TestPlugin_Validate(t *testing.T) {
 			fields: fields{
 				app: nil,
 				options: &Options{
+					Ctx:       context.Background(),
+					Enabled:   true,
+					AuthToken: "",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "Context is nil",
+			fields: fields{
+				app: pocketbase.New(),
+				options: &Options{
+					Ctx:       nil,
 					Enabled:   true,
 					AuthToken: "",
 				},
@@ -32,6 +46,7 @@ func TestPlugin_Validate(t *testing.T) {
 			fields: fields{
 				app: pocketbase.New(),
 				options: &Options{
+					Ctx:       context.Background(),
 					Enabled:   true,
 					AuthToken: "",
 				},
@@ -43,6 +58,7 @@ func TestPlugin_Validate(t *testing.T) {
 			fields: fields{
 				app: pocketbase.New(),
 				options: &Options{
+					Ctx:       context.Background(),
 					Enabled:   false,
 					AuthToken: "",
 				},
@@ -54,6 +70,7 @@ func TestPlugin_Validate(t *testing.T) {
 			fields: fields{
 				app: pocketbase.New(),
 				options: &Options{
+					Ctx:       context.Background(),
 					Enabled:   true,
 					AuthToken: "TEST_AUTH_TOKEN",
 				},

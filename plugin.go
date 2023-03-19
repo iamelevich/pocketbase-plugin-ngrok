@@ -36,6 +36,14 @@ type Plugin struct {
 }
 
 func (p *Plugin) Validate() error {
+	if p.options == nil {
+		return fmt.Errorf("options is required")
+	}
+
+	if p.options.Ctx == nil {
+		return fmt.Errorf("context is required")
+	}
+
 	if p.app == nil {
 		return fmt.Errorf("app is required")
 	}
