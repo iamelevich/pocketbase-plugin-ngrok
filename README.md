@@ -1,5 +1,6 @@
+[![Test](https://github.com/iamelevich/pocketbase-plugin-ngrok/actions/workflows/test.yml/badge.svg)](https://github.com/iamelevich/pocketbase-plugin-ngrok/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/iamelevich/pocketbase-plugin-ngrok/branch/master/graph/badge.svg?token=J8NRLAO01G)](https://codecov.io/gh/iamelevich/pocketbase-plugin-ngrok)
 
-![Coverage](https://img.shields.io/badge/Coverage-21.1%25-red)
 <!-- TOC -->
 * [Overview](#overview)
   * [Requirements](#requirements)
