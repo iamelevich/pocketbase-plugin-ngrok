@@ -35,6 +35,7 @@ type Plugin struct {
 	options *Options
 }
 
+// Validate plugin options. Return error if some option is invalid.
 func (p *Plugin) Validate() error {
 	if p.options == nil {
 		return fmt.Errorf("options is required")
