@@ -19,6 +19,14 @@ func TestPlugin_Validate(t *testing.T) {
 		wantErr bool
 	}{
 		{
+			name: "Options is nil",
+			fields: fields{
+				app:     nil,
+				options: nil,
+			},
+			wantErr: true,
+		},
+		{
 			name: "App is nil",
 			fields: fields{
 				app: nil,
