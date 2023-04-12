@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/fatih/color v1.15.0
-	github.com/pocketbase/pocketbase v0.14.1
+	github.com/pocketbase/pocketbase v0.14.4
 	golang.ngrok.com/ngrok v1.0.0
 )
 
