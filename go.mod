@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/fatih/color v1.15.0
 	github.com/pocketbase/pocketbase v0.15.3
-	golang.ngrok.com/ngrok v1.0.0
+	golang.ngrok.com/ngrok v1.3.0
 )
 
 require (
@@ -63,11 +63,13 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	gocloud.dev v0.29.0 // indirect
-	golang.org/x/crypto v0.8.0 // indirect
+	golang.ngrok.com/muxado v1.0.0 // indirect
+	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/image v0.7.0 // indirect
 	golang.org/x/mod v0.10.0 // indirect
-	golang.org/x/net v0.9.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/term v0.8.0 // indirect
