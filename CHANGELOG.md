@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.11](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.13.10...v0.13.11) (2023-09-14)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pocketbase/pocketbase to v0.18.5 ([a69c1a4](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/a69c1a49f1048aa74d8bb524220dd4b37793a592))
+
 ## [0.13.10](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.13.9...v0.13.10) (2023-08-01)
 
 
