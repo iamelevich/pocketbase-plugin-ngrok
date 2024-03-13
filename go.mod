@@ -1,11 +1,13 @@
 module github.com/iamelevich/pocketbase-plugin-ngrok
 
-go 1.18
+go 1.21
+
+toolchain go1.22.1
 
 require (
 	github.com/fatih/color v1.15.0
 	github.com/pocketbase/pocketbase v0.18.5
-	golang.ngrok.com/ngrok v1.0.0
+	golang.ngrok.com/ngrok v1.9.1
 )
 
 require (
@@ -63,7 +65,9 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	gocloud.dev v0.34.0 // indirect
+	golang.ngrok.com/muxado/v2 v2.0.0 // indirect
 	golang.org/x/crypto v0.13.0 // indirect
 	golang.org/x/image v0.12.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
@@ -82,6 +86,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d // indirect
 	google.golang.org/grpc v1.57.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	lukechampine.com/uint128 v1.3.0 // indirect
 	modernc.org/cc/v3 v3.41.0 // indirect
 	modernc.org/ccgo/v3 v3.16.15 // indirect
