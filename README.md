@@ -171,14 +171,13 @@ You are free to do whatever you want with it, even offering it as a paid service
 
 ## Testing
 
-- Run `make test` to run tests
-- Run `make test-coverage` to run tests with coverage report
+- Run `task test` to run tests
+- Run `task test:report` to run tests and get coverage report in `./coverage.html`
 
 ## Linting
 
-- Run `make lint` to run linters
+- Run `task lint` to run linters
 
 ## Docs update in README
 
-- Install [gomarkdoc](https://github.com/princjef/gomarkdoc)
-- Run `make docs` to update docs in README
+- Run `task docs` to update docs in README (it will also install [gomarkdoc](https://github.com/princjef/gomarkdoc))
