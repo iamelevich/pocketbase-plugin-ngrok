@@ -1,5 +1,5 @@
 [![Test](https://github.com/iamelevich/pocketbase-plugin-ngrok/actions/workflows/test.yml/badge.svg)](https://github.com/iamelevich/pocketbase-plugin-ngrok/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/iamelevich/pocketbase-plugin-ngrok/branch/master/graph/badge.svg?token=J8NRLAO01G)](https://codecov.io/gh/iamelevich/pocketbase-plugin-ngrok)
+[![codecov](https://codecov.io/github/iamelevich/pocketbase-plugin-ngrok/graph/badge.svg?token=J8NRLAO01G)](https://codecov.io/github/iamelevich/pocketbase-plugin-ngrok)
 
 <!-- TOC -->
 * [Overview](#overview)
