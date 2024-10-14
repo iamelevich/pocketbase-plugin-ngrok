@@ -7,7 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/fatih/color v1.17.0
 	github.com/pocketbase/pocketbase v0.22.21
-	golang.ngrok.com/ngrok v1.10.0
+	golang.ngrok.com/ngrok v1.11.0
 )
 
 require (
@@ -46,7 +46,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.13.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
-	github.com/inconshreveable/log15 v3.0.0-testing.3+incompatible // indirect
+	github.com/inconshreveable/log15 v3.0.0-testing.5+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
