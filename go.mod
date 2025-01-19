@@ -7,7 +7,7 @@ toolchain go1.23.5
 require (
 	github.com/fatih/color v1.18.0
 	github.com/pocketbase/pocketbase v0.22.27
-	golang.ngrok.com/ngrok v1.11.0
+	golang.ngrok.com/ngrok v1.12.0
 )
 
 require (
@@ -67,7 +67,7 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	gocloud.dev v0.39.0 // indirect
-	golang.ngrok.com/muxado/v2 v2.0.0 // indirect
+	golang.ngrok.com/muxado/v2 v2.0.1 // indirect
 	golang.org/x/crypto v0.28.0 // indirect
 	golang.org/x/image v0.19.0 // indirect
 	golang.org/x/net v0.30.0 // indirect
@@ -81,7 +81,7 @@ require (
 	google.golang.org/api v0.194.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240827150818-7e3bb234dfed // indirect
 	google.golang.org/grpc v1.65.0 // indirect
-	google.golang.org/protobuf v1.34.2 // indirect
+	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/gc/v3 v3.0.0-20240801135723-a856999a2e4a // indirect
