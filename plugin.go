@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/pocketbase/pocketbase/core"
-	"golang.ngrok.com/ngrok"
-	"golang.ngrok.com/ngrok/config"
+	"golang.ngrok.com/ngrok/v2"
 )
 
 // Options defines optional struct to customize the default plugin behavior.
@@ -20,11 +20,14 @@ type Options struct {
 	// Enabled defines if ngrok tunnel should be started.
 	Enabled bool
 
+	// Enable logging of ngrok events to pocketbase logger
+	EnableLogging bool
+
 	// AuthToken is your ngrok auth token. You can get it from https://dashboard.ngrok.com/auth
 	AuthToken string
 
 	// AfterSetup is a callback function that will be called after ngrok tunnel is started.
-	AfterSetup func(url string) error
+	AfterSetup func(url *url.URL) error
 }
 
 type Plugin struct {
@@ -58,12 +61,26 @@ func (p *Plugin) Validate() error {
 
 func (p *Plugin) exposeNgrok(e *core.ServeEvent) error {
 	if p.options.Enabled {
-		tun, err := ngrok.Listen(
-			p.options.Ctx,
-			config.HTTPEndpoint(config.WithHTTPHandler(e.Router)),
-			ngrok.WithAuthtoken(p.options.AuthToken),
-		)
+		var agent ngrok.Agent
+		var agentErr error
+		if p.options.EnableLogging {
+			agent, agentErr = ngrok.NewAgent(
+				ngrok.WithAuthtoken(p.options.AuthToken),
+				ngrok.WithLogger(e.App.Logger()),
+			)
+		} else {
+			agent, agentErr = ngrok.NewAgent(
+				ngrok.WithAuthtoken(p.options.AuthToken),
+			)
+		}
+		if agentErr != nil {
+			return agentErr
+		}
 
+		tun, err := agent.Forward(
+			p.options.Ctx,
+			ngrok.WithUpstream("tcp://"+e.Server.Addr),
+		)
 		if err != nil {
 			return err
 		}
@@ -78,15 +95,15 @@ func (p *Plugin) exposeNgrok(e *core.ServeEvent) error {
 		log.New(date, "", log.LstdFlags).Print()
 
 		bold := color.New(color.Bold).Add(color.FgGreen)
-		bold.Printf(
+		_, _ = bold.Printf(
 			"%s Ngrok tunnel started at %s\n",
 			strings.TrimSpace(date.String()),
 			color.CyanString("%s", tun.URL()),
 		)
 
 		regular := color.New()
-		regular.Printf(" ➜ REST API: %s\n", color.CyanString("%s/api/", tun.URL()))
-		regular.Printf(" ➜ Admin UI: %s\n", color.CyanString("%s/_/", tun.URL()))
+		_, _ = regular.Printf(" ➜ REST API: %s\n", color.CyanString("%s/api/", tun.URL()))
+		_, _ = regular.Printf(" ➜ Admin UI: %s\n", color.CyanString("%s/_/", tun.URL()))
 	}
 	return nil
 }
@@ -116,11 +133,11 @@ func Register(app core.App, options *Options) (*Plugin, error) {
 		return p, err
 	}
 
-	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		if err := p.exposeNgrok(e); err != nil {
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		if err := p.exposeNgrok(se); err != nil {
 			return err
 		}
-		return nil
+		return se.Next()
 	})
 
 	return p, nil
