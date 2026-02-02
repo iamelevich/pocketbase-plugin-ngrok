@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
-	ngrokPlugin "github.com/iamelevich/pocketbase-plugin-ngrok"
 	"log"
+	"net/url"
+
+	ngrokPlugin "github.com/iamelevich/pocketbase-plugin-ngrok"
 
 	"github.com/pocketbase/pocketbase"
 )
@@ -16,8 +18,8 @@ func main() {
 		Ctx:       context.Background(),
 		Enabled:   true,
 		AuthToken: "YOUR_NGROK_AUTH_TOKEN", // Better to use ENV variable for that
-		AfterSetup: func(url string) error {
-			log.Printf("Started ngrok tunnel at %s", url)
+		AfterSetup: func(url *url.URL) error {
+			log.Printf("Started ngrok tunnel at %s", url.String())
 			return nil
 		},
 	})

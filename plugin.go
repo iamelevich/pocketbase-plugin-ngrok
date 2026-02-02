@@ -4,13 +4,19 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/pocketbase/pocketbase/core"
-	"golang.ngrok.com/ngrok"
-	"golang.ngrok.com/ngrok/config"
+	"golang.ngrok.com/ngrok/v2"
 )
+
+// TunnelForwarder creates ngrok tunnels. Used for dependency injection in tests.
+// When nil, the default ngrok implementation is used.
+type TunnelForwarder interface {
+	Forward(ctx context.Context, upstreamAddr, authToken string, enableLogging bool, logger interface{}) (*url.URL, error)
+}
 
 // Options defines optional struct to customize the default plugin behavior.
 type Options struct {
@@ -20,11 +26,18 @@ type Options struct {
 	// Enabled defines if ngrok tunnel should be started.
 	Enabled bool
 
+	// Enable logging of ngrok events to pocketbase logger
+	EnableLogging bool
+
 	// AuthToken is your ngrok auth token. You can get it from https://dashboard.ngrok.com/auth
 	AuthToken string
 
 	// AfterSetup is a callback function that will be called after ngrok tunnel is started.
-	AfterSetup func(url string) error
+	AfterSetup func(url *url.URL) error
+
+	// TunnelForwarder is optional. When set, used instead of ngrok for creating tunnels.
+	// Primarily useful for testing without a real ngrok connection.
+	TunnelForwarder TunnelForwarder
 }
 
 type Plugin struct {
@@ -58,18 +71,31 @@ func (p *Plugin) Validate() error {
 
 func (p *Plugin) exposeNgrok(e *core.ServeEvent) error {
 	if p.options.Enabled {
-		tun, err := ngrok.Listen(
-			p.options.Ctx,
-			config.HTTPEndpoint(config.WithHTTPHandler(e.Router)),
-			ngrok.WithAuthtoken(p.options.AuthToken),
-		)
+		var tunnelURL *url.URL
+		var err error
+
+		if p.options.TunnelForwarder != nil {
+			var logger interface{}
+			if p.options.EnableLogging {
+				logger = e.App.Logger()
+			}
+			tunnelURL, err = p.options.TunnelForwarder.Forward(
+				p.options.Ctx,
+				"tcp://"+e.Server.Addr,
+				p.options.AuthToken,
+				p.options.EnableLogging,
+				logger,
+			)
+		} else {
+			tunnelURL, err = p.defaultForward(p.options, e)
+		}
 
 		if err != nil {
 			return err
 		}
 
 		if p.options.AfterSetup != nil {
-			if afterErr := p.options.AfterSetup(tun.URL()); afterErr != nil {
+			if afterErr := p.options.AfterSetup(tunnelURL); afterErr != nil {
 				return afterErr
 			}
 		}
@@ -78,17 +104,45 @@ func (p *Plugin) exposeNgrok(e *core.ServeEvent) error {
 		log.New(date, "", log.LstdFlags).Print()
 
 		bold := color.New(color.Bold).Add(color.FgGreen)
-		bold.Printf(
+		_, _ = bold.Printf(
 			"%s Ngrok tunnel started at %s\n",
 			strings.TrimSpace(date.String()),
-			color.CyanString("%s", tun.URL()),
+			color.CyanString("%s", tunnelURL),
 		)
 
 		regular := color.New()
-		regular.Printf(" ➜ REST API: %s\n", color.CyanString("%s/api/", tun.URL()))
-		regular.Printf(" ➜ Admin UI: %s\n", color.CyanString("%s/_/", tun.URL()))
+		_, _ = regular.Printf(" ➜ REST API: %s\n", color.CyanString("%s/api/", tunnelURL))
+		_, _ = regular.Printf(" ➜ Admin UI: %s\n", color.CyanString("%s/_/", tunnelURL))
 	}
 	return nil
+}
+
+func (p *Plugin) defaultForward(opts *Options, e *core.ServeEvent) (*url.URL, error) {
+	var agent ngrok.Agent
+	var agentErr error
+	if opts.EnableLogging {
+		agent, agentErr = ngrok.NewAgent(
+			ngrok.WithAuthtoken(opts.AuthToken),
+			ngrok.WithLogger(e.App.Logger()),
+		)
+	} else {
+		agent, agentErr = ngrok.NewAgent(
+			ngrok.WithAuthtoken(opts.AuthToken),
+		)
+	}
+	if agentErr != nil {
+		return nil, agentErr
+	}
+
+	tun, err := agent.Forward(
+		opts.Ctx,
+		ngrok.WithUpstream("tcp://"+e.Server.Addr),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return tun.URL(), nil
 }
 
 // MustRegister is a helper function that registers plugin and panics if error occurred.
@@ -116,11 +170,11 @@ func Register(app core.App, options *Options) (*Plugin, error) {
 		return p, err
 	}
 
-	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		if err := p.exposeNgrok(e); err != nil {
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		if err := p.exposeNgrok(se); err != nil {
 			return err
 		}
-		return nil
+		return se.Next()
 	})
 
 	return p, nil
