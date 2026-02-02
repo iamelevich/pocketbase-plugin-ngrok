@@ -3,9 +3,11 @@ package pocketbase_plugin_ngrok
 import (
 	"context"
 	"errors"
+	"net/http"
 	"net/url"
 	"testing"
 
+	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
 )
@@ -725,25 +727,217 @@ func TestOptions_VariousCombinations(t *testing.T) {
 	})
 }
 
-// TestCoverage_Notes documents the current test coverage status
-// and explains what cannot be easily tested without actual ngrok connection.
+// mockTunnelForwarder is a mock implementation of TunnelForwarder for testing.
+type mockTunnelForwarder struct {
+	url    *url.URL
+	err    error
+	called bool
+}
+
+func (m *mockTunnelForwarder) Forward(_ context.Context, _, _ string, _ bool, _ interface{}) (*url.URL, error) {
+	m.called = true
+	if m.err != nil {
+		return nil, m.err
+	}
+	return m.url, nil
+}
+
+func TestExposeNgrok_WithMockTunnelForwarder(t *testing.T) {
+	t.Run("exposeNgrok with mock forwarder - success", func(t *testing.T) {
+		app, err := tests.NewTestApp()
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer app.Cleanup()
+
+		mockURL, _ := url.Parse("https://abc123.ngrok.io")
+		mockForwarder := &mockTunnelForwarder{url: mockURL}
+
+		afterSetupCalled := false
+		var receivedURL *url.URL
+		options := &Options{
+			Ctx:             context.Background(),
+			Enabled:         true,
+			AuthToken:       "test_token",
+			TunnelForwarder: mockForwarder,
+			AfterSetup: func(u *url.URL) error {
+				afterSetupCalled = true
+				receivedURL = u
+				return nil
+			},
+		}
+
+		_, err = Register(app, options)
+		if err != nil {
+			t.Fatalf("Register() unexpected error = %v", err)
+		}
+
+		baseRouter, err := apis.NewRouter(app)
+		if err != nil {
+			t.Fatalf("NewRouter() error = %v", err)
+		}
+
+		serveEvent := new(core.ServeEvent)
+		serveEvent.App = app
+		serveEvent.Server = &http.Server{Addr: ":8080"}
+		serveEvent.Router = baseRouter
+
+		err = app.OnServe().Trigger(serveEvent, func(e *core.ServeEvent) error {
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("OnServe().Trigger() error = %v", err)
+		}
+
+		if !mockForwarder.called {
+			t.Error("Mock forwarder was not called")
+		}
+		if !afterSetupCalled {
+			t.Error("AfterSetup callback was not called")
+		}
+		if receivedURL == nil || receivedURL.String() != mockURL.String() {
+			t.Errorf("AfterSetup received URL = %v, want %s", receivedURL, mockURL.String())
+		}
+	})
+
+	t.Run("exposeNgrok with mock forwarder - forwarder returns error", func(t *testing.T) {
+		app, err := tests.NewTestApp()
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer app.Cleanup()
+
+		forwardErr := errors.New("mock forward error")
+		mockForwarder := &mockTunnelForwarder{err: forwardErr}
+
+		options := &Options{
+			Ctx:             context.Background(),
+			Enabled:         true,
+			AuthToken:       "test_token",
+			TunnelForwarder: mockForwarder,
+		}
+
+		_, err = Register(app, options)
+		if err != nil {
+			t.Fatalf("Register() unexpected error = %v", err)
+		}
+
+		baseRouter, err := apis.NewRouter(app)
+		if err != nil {
+			t.Fatalf("NewRouter() error = %v", err)
+		}
+
+		serveEvent := new(core.ServeEvent)
+		serveEvent.App = app
+		serveEvent.Server = &http.Server{Addr: ":8080"}
+		serveEvent.Router = baseRouter
+
+		err = app.OnServe().Trigger(serveEvent, func(e *core.ServeEvent) error {
+			return nil
+		})
+		if err != forwardErr {
+			t.Errorf("OnServe().Trigger() error = %v, want %v", err, forwardErr)
+		}
+		if !mockForwarder.called {
+			t.Error("Mock forwarder was not called")
+		}
+	})
+
+	t.Run("exposeNgrok with mock forwarder - AfterSetup returns error", func(t *testing.T) {
+		app, err := tests.NewTestApp()
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer app.Cleanup()
+
+		mockURL, _ := url.Parse("https://test.ngrok.io")
+		mockForwarder := &mockTunnelForwarder{url: mockURL}
+		afterSetupErr := errors.New("after setup failed")
+
+		options := &Options{
+			Ctx:             context.Background(),
+			Enabled:         true,
+			AuthToken:       "test_token",
+			TunnelForwarder: mockForwarder,
+			AfterSetup: func(*url.URL) error {
+				return afterSetupErr
+			},
+		}
+
+		_, err = Register(app, options)
+		if err != nil {
+			t.Fatalf("Register() unexpected error = %v", err)
+		}
+
+		baseRouter, err := apis.NewRouter(app)
+		if err != nil {
+			t.Fatalf("NewRouter() error = %v", err)
+		}
+
+		serveEvent := new(core.ServeEvent)
+		serveEvent.App = app
+		serveEvent.Server = &http.Server{Addr: ":8080"}
+		serveEvent.Router = baseRouter
+
+		err = app.OnServe().Trigger(serveEvent, func(e *core.ServeEvent) error {
+			return nil
+		})
+		if err != afterSetupErr {
+			t.Errorf("OnServe().Trigger() error = %v, want %v", err, afterSetupErr)
+		}
+	})
+
+	t.Run("exposeNgrok with mock forwarder - EnableLogging", func(t *testing.T) {
+		app, err := tests.NewTestApp()
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer app.Cleanup()
+
+		mockURL, _ := url.Parse("https://logging-test.ngrok.io")
+		mockForwarder := &mockTunnelForwarder{url: mockURL}
+
+		options := &Options{
+			Ctx:             context.Background(),
+			Enabled:         true,
+			EnableLogging:   true,
+			AuthToken:       "test_token",
+			TunnelForwarder: mockForwarder,
+		}
+
+		_, err = Register(app, options)
+		if err != nil {
+			t.Fatalf("Register() unexpected error = %v", err)
+		}
+
+		baseRouter, err := apis.NewRouter(app)
+		if err != nil {
+			t.Fatalf("NewRouter() error = %v", err)
+		}
+
+		serveEvent := new(core.ServeEvent)
+		serveEvent.App = app
+		serveEvent.Server = &http.Server{Addr: ":9090"}
+		serveEvent.Router = baseRouter
+
+		err = app.OnServe().Trigger(serveEvent, func(e *core.ServeEvent) error {
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("OnServe().Trigger() error = %v", err)
+		}
+
+		if !mockForwarder.called {
+			t.Error("Mock forwarder was not called with EnableLogging")
+		}
+	})
+}
+
+// TestCoverage_Notes documents the current test coverage status.
 //
-// Current Coverage:
-// - Validate(): 100% - All validation paths tested
-// - MustRegister(): 100% - Both success and panic cases tested
-// - Register(): 72.7% - Most paths tested except:
-//   - Lines 137-140: The OnServe callback execution (requires server start)
-//
-// - exposeNgrok(): 0% - Cannot test without valid ngrok token and connection
-//
-// The exposeNgrok function and OnServe callback are not tested because:
-// 1. Testing would require a valid ngrok auth token
-// 2. Testing would require actual network connection to ngrok
-// 3. Testing would require starting the PocketBase server
-// 4. These tests would be slow and flaky
-//
-// Integration testing of these components should be done manually or in
-// end-to-end tests with proper ngrok credentials.
+// With the TunnelForwarder abstraction and mock, exposeNgrok is now testable
+// without a real ngrok connection. The defaultForward function (using real
+// ngrok) still requires integration testing with valid credentials.
 func TestCoverage_Notes(t *testing.T) {
 	t.Skip("This is a documentation test only")
 }
