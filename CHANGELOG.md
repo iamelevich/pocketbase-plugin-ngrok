@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.14.2](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.14.1...v0.14.2) (2026-02-21)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pocketbase/pocketbase to v0.36.4 ([fa0b2ff](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/fa0b2ff6e13771fc3fab0d399f8482ba07e78eff))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.36.4 ([05d8391](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/05d8391fca206f7b8d78670d50ae4cde7d50ec14))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.36.5 ([a569ba3](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/a569ba3a1ea9bc38bec791a5e4afe935c144dc9b))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.36.5 ([a8f8b0a](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/a8f8b0ac4e852df59790d7752b3bfc20d3f3e206))
+
 ## [0.14.1](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.14.0...v0.14.1) (2026-02-13)
 
 
