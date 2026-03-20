@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.5](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.14.4...v0.14.5) (2026-03-20)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/fatih/color to v1.19.0 ([9830b94](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/9830b946a68f8ba688802e3aa332c582d0cf07b9))
+* **deps:** update module github.com/fatih/color to v1.19.0 ([830cec0](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/830cec0e6cec0f08666c330a52e243e17858e9ae))
+
 ## [0.14.4](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.14.3...v0.14.4) (2026-03-16)
 
 
