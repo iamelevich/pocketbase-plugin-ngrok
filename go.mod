@@ -6,7 +6,7 @@ toolchain go1.26.2
 
 require (
 	github.com/fatih/color v1.19.0
-	github.com/pocketbase/pocketbase v0.37.3
+	github.com/pocketbase/pocketbase v0.37.4
 	golang.ngrok.com/ngrok/v2 v2.1.3
 )
 
@@ -45,5 +45,5 @@ require (
 	modernc.org/libc v1.72.0 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.49.1 // indirect
+	modernc.org/sqlite v1.50.0 // indirect
 )
