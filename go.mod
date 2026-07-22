@@ -6,7 +6,7 @@ toolchain go1.26.5
 
 require (
 	github.com/fatih/color v1.19.0
-	github.com/pocketbase/pocketbase v0.39.8
+	github.com/pocketbase/pocketbase v0.39.9
 	golang.ngrok.com/ngrok/v2 v2.1.4
 )
 
@@ -17,7 +17,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
-	github.com/ganigeorgiev/fexpr v0.5.0 // indirect
+	github.com/ganigeorgiev/fexpr v0.6.0 // indirect
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
