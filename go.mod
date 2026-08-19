@@ -2,7 +2,7 @@ module github.com/iamelevich/pocketbase-plugin-ngrok
 
 go 1.25.7
 
-toolchain go1.26.6
+toolchain go1.27.0
 
 require (
 	github.com/fatih/color v1.19.0
