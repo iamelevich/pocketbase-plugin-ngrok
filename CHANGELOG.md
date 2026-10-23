@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.14.12](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.14.11...v0.14.12) (2026-10-23)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pocketbase/pocketbase to v0.40.5 ([cbc71c8](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/cbc71c82da7c2f08bc13986b73cb299219edcffd))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.40.5 ([8dba361](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/8dba3612ce1f3935969e1d14f79da67ad406f0c6))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.40.6 ([8a875f8](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/8a875f855e10ce406c47b7be8ce6bffd6778bcbd))
+* **deps:** update module github.com/pocketbase/pocketbase to v0.40.6 ([0cf31bc](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/0cf31bce20c770dbbf031c30aa625841711fcad1))
+* **deps:** update module golang.ngrok.com/ngrok/v2 to v2.2.1 ([bade8e0](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/bade8e0e237772bd020418a70c94f9bc042501dd))
+* **deps:** update module golang.ngrok.com/ngrok/v2 to v2.2.1 ([e009879](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/e009879a3a27fd4a3f91ea81d1361e703f659f39))
+* **deps:** update module golang.ngrok.com/ngrok/v2 to v2.3.0 ([a33c317](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/a33c3173d73c119ef9fbd557d98a730eaf133537))
+* **deps:** update module golang.ngrok.com/ngrok/v2 to v2.3.0 ([def2916](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/def2916657a6f2cb72302cec7611df9ea66e68ac))
+* **deps:** update module golang.ngrok.com/ngrok/v2 to v2.4.0 ([42a194a](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/42a194ac8426240368df03209017794b582dc23b))
+* **deps:** update module golang.ngrok.com/ngrok/v2 to v2.4.0 ([55831fe](https://github.com/iamelevich/pocketbase-plugin-ngrok/commit/55831fee774276e538dbb241c0a06e72e14a400f))
+
 ## [0.14.11](https://github.com/iamelevich/pocketbase-plugin-ngrok/compare/v0.14.10...v0.14.11) (2026-09-12)
 
 
