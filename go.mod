@@ -7,7 +7,7 @@ toolchain go1.27.4
 require (
 	github.com/fatih/color v1.19.0
 	github.com/pocketbase/pocketbase v0.40.6
-	golang.ngrok.com/ngrok/v2 v2.4.0
+	golang.ngrok.com/ngrok/v2 v2.5.0
 )
 
 require (
